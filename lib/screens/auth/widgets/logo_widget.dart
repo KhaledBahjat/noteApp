@@ -14,7 +14,7 @@ class Logo extends StatelessWidget {
         height: 70.h,
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(50.r),
         ),
         child: Image.asset(
           'assets/logo.png',

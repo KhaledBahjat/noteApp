@@ -14,7 +14,7 @@ class TextFeild extends StatelessWidget {
   TextEditingController? controller;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
-  final bool obscureText;
+   bool obscureText;
   @override
   Widget build(BuildContext context) {
     return TextField(
