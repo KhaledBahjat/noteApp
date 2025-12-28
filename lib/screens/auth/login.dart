@@ -18,6 +18,7 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isObscure = true;
+  GlobalKey<FormState> formstate = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -25,12 +26,13 @@ class _LoginState extends State<Login> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        body: Container(
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: ListView(
-              children: [
-                Column(
+        body: Padding(
+          padding: EdgeInsets.all(20),
+          child: ListView(
+            children: [
+              Form(
+                key: formstate,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
@@ -72,6 +74,12 @@ class _LoginState extends State<Login> {
                     ),
                     // email textfield
                     TextFeild(
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Enter your email';
+                        }
+                        return null;
+                      },
                       prefixIcon: Icon(Icons.email),
                       hintText: 'Enter your email',
                       controller: emailController,
@@ -92,6 +100,12 @@ class _LoginState extends State<Login> {
                       height: 10.h,
                     ),
                     TextFeild(
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Enter your password';
+                        }
+                        return null;
+                      },
                       obscureText: isObscure,
                       suffixIcon: IconButton(
                         onPressed: () {
@@ -122,10 +136,12 @@ class _LoginState extends State<Login> {
                     ),
                   ],
                 ),
-                // login button
-                CustomButton(
-                  title: 'Login with Email',
-                  onPressed: () async {
+              ),
+              // login button
+              CustomButton(
+                title: 'Login with Email',
+                onPressed: () async {
+                  if (formstate.currentState!.validate()) {
                     try {
                       await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: emailController.text.trim(),
@@ -166,60 +182,69 @@ class _LoginState extends State<Login> {
                         btnOkOnPress: () {},
                       ).show();
                     }
-                  },
+                  } else {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      animType: AnimType.rightSlide,
+                      title: 'Error',
+                      desc: 'Please fill all the fields.',
+                      btnOkOnPress: () {},
+                    ).show();
+                  }
+                },
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              // Text('Or Continue with'),
+              MaterialButton(
+                height: 40.h,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.r),
                 ),
-                SizedBox(
-                  height: 20.h,
+                textColor: Colors.white,
+                color: Colors.red.shade700,
+                onPressed: () {},
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/google.png', height: 20.h),
+                    SizedBox(width: 10.w),
+                    Text('Continue with Google'),
+                  ],
                 ),
-                // Text('Or Continue with'),
-                MaterialButton(
-                  height: 40.h,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.r),
-                  ),
-                  textColor: Colors.white,
-                  color: Colors.red.shade700,
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, 'signup');
+                },
+                child: Text.rich(
+                  TextSpan(
+                    text: "Don't have an account? ",
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: Colors.grey,
+                    ),
                     children: [
-                      Image.asset('assets/google.png', height: 20.h),
-                      SizedBox(width: 10.w),
-                      Text('Continue with Google'),
+                      TextSpan(
+                        text: 'Sign Up',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.orange.shade200,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ],
                   ),
+                  textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
-
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'signup');
-                  },
-                  child: Text.rich(
-                    TextSpan(
-                      text: "Don't have an account? ",
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.grey,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Sign Up',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.orange.shade200,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
