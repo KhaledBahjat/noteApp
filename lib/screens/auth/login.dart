@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:note_app/screens/auth/widgets/coustom_text_form.dart';
+import 'package:note_app/screens/auth/widgets/custom_button.dart';
 import 'package:note_app/screens/auth/widgets/logo_widget.dart';
 
 class Login extends StatefulWidget {
@@ -11,6 +13,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   @override
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool isObscure = true;
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -63,32 +68,10 @@ class _LoginState extends State<Login> {
                       height: 10.h,
                     ),
                     // email textfield
-                    TextField(
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.h,
-                          horizontal: 20.w,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        hintText: 'Enter your email',
-                        hintStyle: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey,
-                        ),
-                      ),
+                    TextFeild(
+                      prefixIcon: Icon(Icons.email),
+                      hintText: 'Enter your email',
+                      controller: emailController,
                     ),
 
                     SizedBox(
@@ -105,35 +88,23 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    // password textfield
-                    TextField(
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.h,
-                          horizontal: 20.w,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        hintText: 'Enter your password',
-                        hintStyle: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey,
-                        ),
+                    TextFeild(
+                      obscureText: true,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isObscure = !isObscure;
+                          });
+                        },
+                        icon: isObscure
+                            ? Icon(Icons.visibility_off)
+                            : Icon(Icons.visibility),
                       ),
+                      hintText: 'Enter your password',
+                      controller: passwordController,
                     ),
 
+                    // password textfield
                     Container(
                       margin: EdgeInsets.only(top: 10.h, bottom: 20.h),
                       alignment: Alignment.topRight,
@@ -149,16 +120,7 @@ class _LoginState extends State<Login> {
                   ],
                 ),
                 // login button
-                MaterialButton(
-                  height: 40.h,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.r),
-                  ),
-                  textColor: Colors.white,
-                  color: Colors.orange,
-                  onPressed: () {},
-                  child: Text('Login'),
-                ),
+                CustomButton(title: 'Login with Email', onPressed: () {}),
                 SizedBox(
                   height: 20.h,
                 ),
@@ -183,9 +145,11 @@ class _LoginState extends State<Login> {
                 SizedBox(
                   height: 20.h,
                 ),
+
                 InkWell(
-                  
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, 'signup');
+                  },
                   child: Text.rich(
                     TextSpan(
                       text: "Don't have an account? ",
