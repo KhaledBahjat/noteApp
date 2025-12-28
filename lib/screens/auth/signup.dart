@@ -1,8 +1,9 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_app/screens/auth/widgets/coustom_text_form.dart';
 import 'package:note_app/screens/auth/widgets/custom_button.dart';
-import 'package:note_app/screens/auth/widgets/logo_widget.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -15,7 +16,8 @@ class _SignUpState extends State<SignUp> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool isObscure = true;
+  bool isObscure = false;
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -100,7 +102,7 @@ class _SignUpState extends State<SignUp> {
                     height: 10.h,
                   ),
                   TextFeild(
-                    obscureText: true,
+                    obscureText: isObscure,
                     suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
@@ -131,7 +133,65 @@ class _SignUpState extends State<SignUp> {
                 ],
               ),
               // signup button
-              CustomButton(title: 'Sign Up', onPressed: () {}),
+              CustomButton(
+                title: 'Sign Up',
+                onPressed: () async {
+                  try {
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                    );
+
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.success,
+                      animType: AnimType.rightSlide,
+                      title: 'Success',
+                      desc: 'Account created successfully',
+                      btnOkOnPress: () {
+                        Navigator.pushReplacementNamed(context, 'login');
+                      },
+                    ).show();
+                  } on FirebaseAuthException catch (e) {
+                    String message;
+
+                    switch (e.code) {
+                      case 'weak-password':
+                        message =
+                            'Password is too weak (minimum 6 characters).';
+                        break;
+
+                      case 'email-already-in-use':
+                        message = 'This email is already registered.';
+                        break;
+
+                      case 'invalid-email':
+                        message = 'Invalid email format.';
+                        break;
+
+                      default:
+                        message = e.message ?? 'Registration failed.';
+                    }
+
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      animType: AnimType.rightSlide,
+                      title: 'Error',
+                      desc: message,
+                      btnOkOnPress: () {},
+                    ).show();
+                  } catch (e) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      title: 'Error',
+                      desc: 'Unexpected error occurred',
+                      btnOkOnPress: () {},
+                    ).show();
+                  }
+                },
+              ),
               SizedBox(
                 height: 20.h,
               ),

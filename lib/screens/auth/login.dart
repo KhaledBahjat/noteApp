@@ -1,3 +1,5 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_app/screens/auth/widgets/coustom_text_form.dart';
@@ -16,6 +18,7 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isObscure = true;
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -89,7 +92,7 @@ class _LoginState extends State<Login> {
                       height: 10.h,
                     ),
                     TextFeild(
-                      obscureText: true,
+                      obscureText: isObscure,
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
@@ -120,7 +123,51 @@ class _LoginState extends State<Login> {
                   ],
                 ),
                 // login button
-                CustomButton(title: 'Login with Email', onPressed: () {}),
+                CustomButton(
+                  title: 'Login with Email',
+                  onPressed: () async {
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                      );
+
+                      Navigator.pushReplacementNamed(context, 'home');
+                    } on FirebaseAuthException catch (e) {
+                      String message;
+
+                      switch (e.code) {
+                        case 'user-not-found':
+                          message = 'No user found for that email.';
+                          break;
+
+                        case 'wrong-password':
+                          message = 'Wrong password provided.';
+                          break;
+
+                        case 'invalid-credential':
+                          message = 'Email or password is incorrect.';
+                          break;
+
+                        case 'invalid-email':
+                          message = 'Invalid email format.';
+                          break;
+
+                        default:
+                          message = e.message ?? 'Login failed.';
+                      }
+
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.error,
+                        animType: AnimType.rightSlide,
+                        title: 'Error',
+                        desc: message,
+                        btnOkOnPress: () {},
+                      ).show();
+                    }
+                  },
+                ),
                 SizedBox(
                   height: 20.h,
                 ),
