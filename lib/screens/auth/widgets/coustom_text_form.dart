@@ -9,15 +9,18 @@ class TextFeild extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.obscureText = false,
+    required this.validator,
   });
   final String? hintText;
   TextEditingController? controller;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final String? Function(String?)? validator;
    bool obscureText;
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      validator: validator,
       obscureText: obscureText,
       controller: controller,
       decoration: InputDecoration(
