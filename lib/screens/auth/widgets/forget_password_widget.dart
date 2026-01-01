@@ -1,100 +1,120 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ForgetPasswordScreen extends StatefulWidget {
-  const ForgetPasswordScreen({super.key});
+void showForgotPasswordDialog(BuildContext context) {
+  TextEditingController emailController = TextEditingController();
 
-  @override
-  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
-}
-
-class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  bool isLoading = false;
-
-  Future<void> resetPassword() async {
-    if (!formKey.currentState!.validate()) return;
-
-    setState(() => isLoading = true);
-
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: emailController.text.trim(),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password reset email sent ✔'),
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.r),
         ),
-      );
-
-      Navigator.pop(context); // يرجع لصفحة اللوجين
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.message ?? 'Something went wrong'),
-        ),
-      );
-    }
-
-    setState(() => isLoading = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Forget Password'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Enter your email to reset password',
-                style: TextStyle(fontSize: 16),
+              // icon
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.orange.withOpacity(0.15),
+                child: Icon(
+                  Icons.lock_reset,
+                  color: Colors.orange,
+                  size: 30,
+                ),
               ),
+
+              SizedBox(height: 15.h),
+
+              Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                'Enter your email to receive a password reset link',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                ),
+              ),
+
               const SizedBox(height: 20),
 
-              TextFormField(
+              // email field
+              TextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  hintText: 'Enter your email',
+                  prefixIcon: Icon(Icons.email, color: Colors.orange),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Email is required';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Enter a valid email';
-                  }
-                  return null;
-                },
               ),
 
               const SizedBox(height: 20),
 
+              // send button
               SizedBox(
                 width: double.infinity,
-                height: 50,
                 child: ElevatedButton(
-                  onPressed: isLoading ? null : resetPassword,
-                  child: isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Reset Password'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    padding: EdgeInsets.symmetric(vertical: 14.r),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () async {
+                    if (emailController.text.isNotEmpty) {
+                      await FirebaseAuth.instance.sendPasswordResetEmail(
+                        email: emailController.text.trim(),
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please enter your email'),
+                        ),
+                      );
+                    }
+                  },
+                  child: Text(
+                    'Send Reset Link',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.grey),
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
+      );
+    },
+  );
 }
