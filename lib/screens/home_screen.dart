@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(10),
         child: isLoading
             ? Center(
-                child: CircularProgressIndicator(color: Colors.orange,),
+                child: CircularProgressIndicator(
+                  color: Colors.orange,
+                ),
               )
             : GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -71,18 +76,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 itemCount: data.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'assets/categorys.png',
-                            height: 100,
-                          ),
+                  return InkWell(
+                    onLongPress: () {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.question,
+                        animType: AnimType.bottomSlide,
+                        title: 'Delete Category',
+                        desc: 'Are you sure you want to delete this category?',
+                        btnCancelOnPress: () {},
+                        btnOkOnPress: () async {
+                          await FirebaseFirestore.instance
+                              .collection('category')
+                              .doc(data[index].id)
+                              .delete();
+                          Navigator.of(context).pushReplacementNamed('home');
+                        },
+                      ).show();
+                    },
+                    child: Card(
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              'assets/categorys.png',
+                              height: 100,
+                            ),
 
-                          Text("${data[index]['name']}"),
-                        ],
+                            Text("${data[index]['name']}"),
+                          ],
+                        ),
                       ),
                     ),
                   );
