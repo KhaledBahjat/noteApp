@@ -1,9 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  List<QueryDocumentSnapshot> data = [];
+
+  getData() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('category')
+        .get();
+    data.addAll(querySnapshot.docs);
+    setState(() {});
+  }
+
+  void initState() {
+    getData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,31 +54,34 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          mainAxisExtent: 160,
-        ),
-
-        children: [
-          Card(
-            child: Container(
-              padding: EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  Image.asset(
-                    'assets/categorys.png',
-                    height: 100,
-                  ),
-
-                  Text('Category'),
-                ],
-              ),
-            ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            mainAxisExtent: 160,
           ),
-        ],
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            return Card(
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/categorys.png',
+                      height: 100,
+                    ),
+
+                    Text("${data[index]['name']}"),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
