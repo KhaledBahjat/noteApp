@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_app/screens/auth/widgets/coustom_text_form.dart';
 import 'package:note_app/screens/auth/widgets/custom_button.dart';
+import 'package:note_app/screens/auth/widgets/forget_password_widget.dart';
 import 'package:note_app/screens/auth/widgets/logo_widget.dart';
 
 class Login extends StatefulWidget {
@@ -122,15 +123,18 @@ class _LoginState extends State<Login> {
                     ),
 
                     // password textfield
-                    Container(
-                      margin: EdgeInsets.only(top: 10.h, bottom: 20.h),
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.orange.shade200,
-                          fontWeight: FontWeight.w500,
+                    GestureDetector(
+                      onTap: () => showForgotPasswordDialog(context),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10.h, bottom: 20.h),
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.orange.shade200,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
@@ -149,7 +153,7 @@ class _LoginState extends State<Login> {
                       );
                       if (FirebaseAuth.instance.currentUser!.emailVerified &&
                           FirebaseAuth.instance.currentUser != null) {
-                        Navigator.of(context).pushNamed('home');
+                        Navigator.of(context).pushReplacementNamed('home');
                       } else {
                         AwesomeDialog(
                           context: context,

@@ -137,22 +137,11 @@ class _SignUpState extends State<SignUp> {
                       hintText: 'Enter your password',
                       controller: passwordController,
                     ),
-
-                    // password textfield
-                    Container(
-                      margin: EdgeInsets.only(top: 10.h, bottom: 20.h),
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.orange.shade200,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 30.h,
               ),
               // signup button
               CustomButton(
@@ -167,15 +156,15 @@ class _SignUpState extends State<SignUp> {
                           );
                       await FirebaseAuth.instance.currentUser!
                           .sendEmailVerification();
-
+                      await FirebaseAuth.instance.signOut();
                       AwesomeDialog(
                         context: context,
                         dialogType: DialogType.success,
                         animType: AnimType.rightSlide,
                         title: 'Success',
                         desc:
-                            'Account created successfully \n please check your email to verify your account',
-                        btnOkOnPress: () async {
+                            'email created successfully\n please check your email to verify your account',
+                        btnOkOnPress: () {
                           Navigator.pushReplacementNamed(context, 'login');
                         },
                       ).show();
@@ -185,50 +174,33 @@ class _SignUpState extends State<SignUp> {
                       switch (e.code) {
                         case 'weak-password':
                           message =
-                              'Password is too weak (minimum 6 characters).';
+                              'Weak password please enter a strong password.';
                           break;
-
                         case 'email-already-in-use':
-                          message = 'This email is already registered.';
+                          message =
+                              'The email address is already in use by another account.';
                           break;
-
                         case 'invalid-email':
-                          message = 'Invalid email format.';
+                          message = 'The email address is not valid.';
                           break;
-
                         default:
-                          message = e.message ?? 'Registration failed.';
+                          message =
+                              e.message ??
+                              'Unknown error occurred. Please try again.';
                       }
 
                       AwesomeDialog(
                         context: context,
                         dialogType: DialogType.error,
-                        animType: AnimType.rightSlide,
                         title: 'Error',
                         desc: message,
                         btnOkOnPress: () {},
                       ).show();
-                    } catch (e) {
-                      AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.error,
-                        title: 'Error',
-                        desc: 'Unexpected error occurred',
-                        btnOkOnPress: () {},
-                      ).show();
                     }
-                  } else {
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.error,
-                      animType: AnimType.rightSlide,
-                      title: 'Error',
-                      desc: 'Please fill all the fields',
-                      btnOkOnPress: () {},
-                    ).show();
                   }
                 },
               ),
+
               SizedBox(
                 height: 20.h,
               ),

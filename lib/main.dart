@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_app/screens/auth/login.dart';
 import 'package:note_app/screens/auth/signup.dart';
-import 'package:note_app/screens/auth/widgets/forget_password_widget.dart';
 import 'package:note_app/screens/home_screen.dart';
 import 'firebase_options.dart';
 
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
             'login': (context) => Login(),
             'signup': (context) => SignUp(),
             'home': (context) => HomeScreen(),
-            'forget': (context) => ForgetPasswordScreen(),
+            
           },
         );
       },
