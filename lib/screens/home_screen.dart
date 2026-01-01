@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
               await FirebaseAuth.instance.signOut();
               Navigator.of(
                 context,
-              ).pushNamedAndRemoveUntil('login', (route) => false);
+              ).pushReplacementNamed('login');
             },
             icon: Icon(Icons.logout),
           ),

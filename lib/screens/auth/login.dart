@@ -147,8 +147,22 @@ class _LoginState extends State<Login> {
                         email: emailController.text.trim(),
                         password: passwordController.text.trim(),
                       );
-
-                      Navigator.pushReplacementNamed(context, 'home');
+                      if (FirebaseAuth.instance.currentUser!.emailVerified &&
+                          FirebaseAuth.instance.currentUser != null) {
+                        Navigator.of(context).pushNamed('home');
+                      } else {
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.info,
+                          animType: AnimType.rightSlide,
+                          title: 'Error',
+                          desc: 'Please verify your email.',
+                          btnOkOnPress: () async {
+                            await FirebaseAuth.instance.currentUser!
+                                .sendEmailVerification();
+                          },
+                        ).show();
+                      }
                     } on FirebaseAuthException catch (e) {
                       String message;
 

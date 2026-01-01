@@ -165,14 +165,17 @@ class _SignUpState extends State<SignUp> {
                             email: emailController.text.trim(),
                             password: passwordController.text.trim(),
                           );
+                      await FirebaseAuth.instance.currentUser!
+                          .sendEmailVerification();
 
                       AwesomeDialog(
                         context: context,
                         dialogType: DialogType.success,
                         animType: AnimType.rightSlide,
                         title: 'Success',
-                        desc: 'Account created successfully',
-                        btnOkOnPress: () {
+                        desc:
+                            'Account created successfully \n please check your email to verify your account',
+                        btnOkOnPress: () async {
                           Navigator.pushReplacementNamed(context, 'login');
                         },
                       ).show();
@@ -214,8 +217,7 @@ class _SignUpState extends State<SignUp> {
                         btnOkOnPress: () {},
                       ).show();
                     }
-                  }
-                  else {
+                  } else {
                     AwesomeDialog(
                       context: context,
                       dialogType: DialogType.error,

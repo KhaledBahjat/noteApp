@@ -41,48 +41,51 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAQcbEgIpMSL9V4xHbtjqyYiHbyB-d9kbw',
-    appId: '1:946817765720:web:7980d6db201e4a3c77152d',
-    messagingSenderId: '946817765720',
-    projectId: 'notes-18548',
-    authDomain: 'notes-18548.firebaseapp.com',
-    storageBucket: 'notes-18548.firebasestorage.app',
-    measurementId: 'G-JGPDMG5W9Y',
+    apiKey: 'AIzaSyCXxtzSV65EeNrg1jTCUiOuwAzfL2wldsM',
+    appId: '1:559045140208:web:041c6d727b36e1a15e6c35',
+    messagingSenderId: '559045140208',
+    projectId: 'notes-app-32e1a',
+    authDomain: 'notes-app-32e1a.firebaseapp.com',
+    storageBucket: 'notes-app-32e1a.firebasestorage.app',
+    measurementId: 'G-9QPDMVJGH4',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBhgbMDOi4HFVIK8nPpgD_XP5PWGJ0f48o',
-    appId: '1:946817765720:android:c59e0e0002fe132b77152d',
-    messagingSenderId: '946817765720',
-    projectId: 'notes-18548',
-    storageBucket: 'notes-18548.firebasestorage.app',
+    apiKey: 'AIzaSyDo7S1FR6qtqXLYiOEiyNFTatTDRxNd7Rg',
+    appId: '1:559045140208:android:c24406637c9a45fd5e6c35',
+    messagingSenderId: '559045140208',
+    projectId: 'notes-app-32e1a',
+    storageBucket: 'notes-app-32e1a.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBqy_YoQ2GVl2ummLWbjYV-xRWvRyZBMAw',
-    appId: '1:946817765720:ios:3b95d9e38fe46b7477152d',
-    messagingSenderId: '946817765720',
-    projectId: 'notes-18548',
-    storageBucket: 'notes-18548.firebasestorage.app',
+    apiKey: 'AIzaSyA6tcPHlcR0s40HaNBfPEIWK9n4WaXRNTs',
+    appId: '1:559045140208:ios:34f1de18dc25fcb55e6c35',
+    messagingSenderId: '559045140208',
+    projectId: 'notes-app-32e1a',
+    storageBucket: 'notes-app-32e1a.firebasestorage.app',
+    iosClientId: '559045140208-o62aglk90vdn9beksuh880gk2qtockfq.apps.googleusercontent.com',
     iosBundleId: 'com.example.noteApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBqy_YoQ2GVl2ummLWbjYV-xRWvRyZBMAw',
-    appId: '1:946817765720:ios:3b95d9e38fe46b7477152d',
-    messagingSenderId: '946817765720',
-    projectId: 'notes-18548',
-    storageBucket: 'notes-18548.firebasestorage.app',
+    apiKey: 'AIzaSyA6tcPHlcR0s40HaNBfPEIWK9n4WaXRNTs',
+    appId: '1:559045140208:ios:34f1de18dc25fcb55e6c35',
+    messagingSenderId: '559045140208',
+    projectId: 'notes-app-32e1a',
+    storageBucket: 'notes-app-32e1a.firebasestorage.app',
+    iosClientId: '559045140208-o62aglk90vdn9beksuh880gk2qtockfq.apps.googleusercontent.com',
     iosBundleId: 'com.example.noteApp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAQcbEgIpMSL9V4xHbtjqyYiHbyB-d9kbw',
-    appId: '1:946817765720:web:71bff66ddd2f00fc77152d',
-    messagingSenderId: '946817765720',
-    projectId: 'notes-18548',
-    authDomain: 'notes-18548.firebaseapp.com',
-    storageBucket: 'notes-18548.firebasestorage.app',
-    measurementId: 'G-G90CVR94LH',
+    apiKey: 'AIzaSyCXxtzSV65EeNrg1jTCUiOuwAzfL2wldsM',
+    appId: '1:559045140208:web:c413eb204a54b9125e6c35',
+    messagingSenderId: '559045140208',
+    projectId: 'notes-app-32e1a',
+    authDomain: 'notes-app-32e1a.firebaseapp.com',
+    storageBucket: 'notes-app-32e1a.firebasestorage.app',
+    measurementId: 'G-GVS5DNLDN4',
   );
+
 }
