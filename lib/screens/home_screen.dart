@@ -14,11 +14,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   List<QueryDocumentSnapshot> data = [];
 
+  bool isLoading = true;
   getData() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('category')
         .get();
     data.addAll(querySnapshot.docs);
+    isLoading = false;
     setState(() {});
   }
 
@@ -56,32 +58,36 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            mainAxisExtent: 160,
-          ),
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return Card(
-              child: Container(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/categorys.png',
-                      height: 100,
-                    ),
-
-                    Text("${data[index]['name']}"),
-                  ],
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator(color: Colors.orange,),
+              )
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  mainAxisExtent: 160,
                 ),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            'assets/categorys.png',
+                            height: 100,
+                          ),
+
+                          Text("${data[index]['name']}"),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }
